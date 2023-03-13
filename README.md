@@ -203,6 +203,40 @@ let get_nth_element tup index = match tup with
 
 get_nth_element (2, 4, 6, 8) 3;; (* will return 8 *)
 ```
+## Part 6: Higher-order Functions
+
+Higher-order functions in OCaml are functions that take other functions as arguments and/or return functions as results. In OCaml, functions are first-class values, which means they can be treated just like any other value, such as an integer or a string.
+
+Here is an example of a higher-order function in OCaml:
+
+```ocaml
+let apply_twice f x = f (f x)
+```
+
+This function takes two arguments: a function `f` and a value `x`. It applies `f` to `x` twice and returns the result. For example, if we define a function `square` that computes the square of its argument:
+
+```ocaml
+let square x = x * x
+```
+
+We can apply `square` twice to the value `3` using the `apply_twice` function:
+
+```ocaml
+let result = apply_twice square 3 (* returns 81 *)
+```
+
+Another example of a higher-order function is `List.map`, which applies a given function to each element of a list and returns a new list containing the results:
+
+```ocaml
+let add_one x = x + 1
+let list = [1; 2; 3]
+let result = List.map add_one list (* returns [2; 3; 4] *)
+```
+
+In this example, we define a function `add_one` that adds one to its argument, and a list list containing the values `[1; 2; 3]`. We apply `add_one` to each element of the list using `List.map`, resulting in a new list `[2; 3; 4]`.
+
+Higher-order functions are powerful tools for creating generic algorithms that can be reused with different functions. They are a key feature of functional programming, and are widely used in OCaml and other functional programming languages.
+
 # Map, Fold, Tree-Type
 
 ## Introduction
@@ -432,3 +466,14 @@ Given the delete function:
 ```ocaml
 let delete lst elem = List.fold_right (fun x a -> if x = elem then a else x :: a) lst [];;
 ```
+
+#General idea of finite state machine
+A finite state machine (FSM) is a mathematical model used to represent a system that can be in one of a finite number of states and transitions between these states in response to external inputs. It consists of a set of states, a set of inputs, a set of outputs, and a set of transitions.
+
+A state is a condition or situation of the system at a particular moment in time. An input is any external signal that causes the system to transition from one state to another. An output is any action or response produced by the system in response to an input or state change. A transition is a change from one state to another, triggered by an input or a combination of inputs.
+
+Finite state machines can be used to model a wide range of systems, from simple vending machines to complex computer systems. They are widely used in digital logic circuits, control systems, and computer science.
+
+In a simple example of a finite state machine, consider a traffic light. The traffic light can be in one of three states: red, yellow, or green. The inputs to the traffic light are the pedestrian and vehicle sensors, which trigger transitions between the states. The outputs of the traffic light are the signals it produces, such as the red, yellow, and green lights.
+
+In this example, the traffic light FSM consists of three states (red, yellow, green), two inputs (pedestrian and vehicle sensors), and three outputs (red, yellow, and green lights). The FSM transitions from one state to another based on the inputs it receives, and produces outputs accordingly.
