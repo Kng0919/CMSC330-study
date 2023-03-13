@@ -98,7 +98,10 @@ You will have to fill in definitions for the functions `tf1`, `tf2`, `tf3` such 
   double [1;2;3;4] = [1;1;2;2;3;3;4;4]
   double ["a"; "b"; "c"] = ["a"; "a"; "b"; "b"; "c"; "c"]
   ```
-Datatypes & Higher Order Functions
+# Discussion 4: Datatypes & Higher Order Functions
+Due: 27 September 2020, 11:59pm EDT (No late submissions will be accepted)
+
+Points: 100 public
 
 ## Introduction
 
