@@ -1,289 +1,401 @@
-# Discussion 3: Introduction to OCaml
-Due: 18 September 2020, 11:59pm EDT (No late submissions will be accepted)
+# Ocaml expressions, values, and types
 
-Points: 100 public
+Some basics of Ocaml. Ocaml is a compiled and bootstrapped language. It is implicitly typed. That means, the compiler infers the type of your variables and values at compile time. Ocaml is also statically typed, meaning once the type of a variable is infered, the variable must abide by the type throughout its scope. Everything in Ocaml is immutable. Everything means everything. Once you initialize a variable, you cannot change throughout its scope. You should redefine it to change it. That being said, `=` is an equality operator and not the assignment operator outside `let` expressions. 
 
-## Introduction
+Some primitive built-in data types are `int`, `float`, `char`, `string`, `bool`, and `unit`. Other composite data types include `tuples`, `lists`, `option`, and variants.
 
-This exercise consists of a few short functions to help you familiarize yourself with OCaml.  You can review the content of the discussion in [notes.rb](notes.rb), which includes the topics and examples from the discussion video.  Also, check out [utop-tutorial.md](utop-tutorial.md) for an introduction to using `utop`.
+We know the primitive data types but we will learn more about the others later down in the discussion. Arithmetic operators in Ocaml are not overloaded. So, you can use `+`, `-`, `*`, `/` on two ints but not on floats. For floats, they are `+.`, `-.`, `*.`, `/.`. **Notice the period**.
 
-### Testing & Submitting
+Expressions are something that evaluates to some value. Example: `1 + 2`, `2 < 3`, `"hello"`.
 
-You will submit this project to [Gradescope](https://www.gradescope.com/courses/171498/assignments/681774).  You may only submit the **disc3.rb** file.  To test locally, run `dune runtest -f`.
+## Part 2: Let bindings and Let expressions
 
-## Part 1: Type inference
+Everything in Ocaml is expression , say `e`. So, everything will evaluate to some value of type, say `t`.
 
-At the top of [disc3.ml](src/disc3.ml), there are a few function definitions. Try determining the types of these functions and check your answers with `utop`.  This portion of the discussion is not tested (and thus not graded), but these kinds of exercises may appear on quizzes and exams!
+Examples:  
+- `1: int`
+- `true: bool`
+- `'e': char`
 
-## Part 2: Type definitions
-
-You will have to fill in definitions for the functions `tf1`, `tf2`, `tf3` such that they have the type that is expected in the `.mli`. The operation of the function does not matter, as long as they have the correct types.
-
-#### `tf1 a`
-
-- **Type**: `string -> int`
-
-#### `tf2 a b c`
-
-- **Type**: `'a -> 'b -> 'b -> bool`
-
-#### `tf3 a b`
-
-- **Type**: `'a list -> 'a list -> 'a`
-- **Note**: For this one, you can assume that the lists `a` and `b` are not empty.
-
-## Part 3: Functions
-
-#### `concat str1 str2`
-
-- **Type**: `string -> string -> string`
-- **Description**: Appends `str2` to the end of `str1`.
-- **Examples**:
-  ```ocaml
-  concat "" "" = ""
-  concat "" "abc" = "abc"
-  concat "xyz" "" = "xyz"
-  concat "abc" "xyz" = "abcxyz"
-  ```
-
-#### `add_to_float integer flt`
-
-- **Type**: `int -> float -> float`
-- **Description**: Adds `integer` and `flt` and returns a float representation of the sum.
-- **Examples**:
-  ```ocaml
-  add_to_float 3 4.8 = 7.8
-  add_to_float 0 0.0 = 0.0
-  ```
-
-#### `fib n`
-
-- **Type**: `int -> int`
-- **Description**: Calculates the nth [Fibonacci number](https://en.wikipedia.org/wiki/Fibonacci_number).
-- **Examples**:
-  ```ocaml
-  fib 0 = 0
-  fib 1 = 1
-  fib 2 = 1
-  fib 3 = 2
-  fib 6 = 8
-  ```
-
-## Part 4: Lists
-
-#### `add_three lst`
-
-- **Type**: `int list -> int list`
-- **Description**: Adds 3 to each element in `lst`.
-- **Examples**:
-  ```ocaml
-  add_three [] = []
-  add_three [1] = [4]
-  add_three [1; 3; 5] = [4; 6; 8]
-  ```
-
-#### `filter n lst`
-
-- **Type**: ``a -> `a list -> `a list`
-- **Description**: Given `n` and a list `lst`, remove elements from `lst` that are greater than `n`.
-- **Examples**:
-  ```ocaml
-  filter 2 [1; 2; 3; 3; 2; 1] = [1; 2; 2; 1]
-  filter 5 [-1; 2; 3; 4] = [-1; 2; 3; 4]
-  ```
-
-#### `double lst`
-
-- **Type**: `'a list -> 'a list`
-- **Description**: Given a list `lst`, return a new list that has two copies of every element in `lst`.
-- **Examples**: 
-  ```ocaml
-  double [1;2;3;4] = [1;1;2;2;3;3;4;4]
-  double ["a"; "b"; "c"] = ["a"; "a"; "b"; "b"; "c"; "c"]
-  ```
-# Discussion 4: Datatypes & Higher Order Functions
-Due: 27 September 2020, 11:59pm EDT (No late submissions will be accepted)
-
-Points: 100 public
-
-## Introduction
-
-This exercise consists of a couple of functions to get you familiarized with tuples and records, but mostly on higher order functions.  You can review the content of the discussion in [notes.rb](notes.rb), which includes the topics and examples from the discussion video.
-
-### Testing & Submitting
-
-You will submit this project to [Gradescope](https://www.gradescope.com/courses/171498/assignments/694478).  You may only submit the **disc4.ml** file.  To test locally, run `dune runtest -f`.
-
-### Implementation
-
-#### IMPORTANT NOTE 
-You may **not** add the `rec` keyword to any of the functions you implement this week, and you may **not** implement any recursive helper functions. By following the video and notes sheet, you should be able to write these functions using only map, foldl, and foldr. 
-
-#### `mul_thresh`
-
-- **Type**: `int list -> int -> int * int`
-- **Description**: Given a list of ints and another int `thresh`, return a tuple whose first element is the product of all elements in the list *less* than `thresh`, and whose second element is the product of all elements in the list *greater than or equal to* `thresh`. In the event that the list is empty, return the tuple (1,1), since this is the multiplicative identity, $a^0$
-- **Examples**:
-  ```ocaml
-  mul_thresh [1;3;5;7] 6 = (15, 7)
-  mul_thresh [] 6 = (1, 1) 
-  mul_thresh [6;7] 6 = (1, 42)
-  ```
-
-#### `multi_map`
-
-- **Type**: `('a-> 'b) -> 'a list list -> 'b list list`
-- **Description**: Given a function `f` and a 2d list (a list of lists), return a new list in which each of the elements of the original list have had the function applied to them. 
-As the name suggests, you might want to implement this function using multiple maps. 
-- **Examples**:
-  ```ocaml
-  multi_map (fun x -> x ^ " is cool") [["shilpa"; "minya"];["vinnie";"pavan"]] = [["shilpa is cool"; "minya is cool"]; ["vinnie is cool"; "pavan is cool"]]
-  multi_map float_of_int [[1;3;5];[2;4;6]] = [[1.;3.;5.];[2.;4.;6.;]] 
-  multi_map float_of_int [[];[]] = [[];[]]
-  ```
-
-#### `update_database`
-
-- **Type**: `val update_database : (string * int * float) list -> student_information list` 
-- **Description**: Given a list of tuples of the following form: `(name, age, gpa)`, transform this list of tuples into a list of type `student_information`.  
-- **Examples**: 
-    ```ocaml 
-    update_database [("alice", 21, 4.);("bob", 20, 3.85);("jess", 22, 2.9)] = [{name = "alice"; age = 21; gpa = 4.}; {name = "bob"; age = 20; gpa = 3.85}; {name = "jess"; age = 22; gpa = 2.9}]  
-    update_database [] = []
-    ``` 
-
-#### `stalin_sort`
-
-- **Type**: `'a list -> 'a list` 
-- **Description**: Given a list, sort it using Stalin Sort, in which every element that is out of line is simply eliminated from the list. You **must** start from the left for this function.   
-- **Examples**: 
-    ```ocaml 
-    stalin_sort [] = [] 
-    stalin_sort [1;0;2;1;4;4] = [1;2;4;4] 
-    stalin_sort [9;1;2;3;4;5] = [9]
-    stalin_sort ["330";"is";"horrendous";"terrific"] = ["330"; "is"; "terrific"]
-    ``` 
-
-#### `stalin_sort_right`
-
-- **Type**: `'a list -> 'a list` 
-- **Description**: Given a list, sort it using Stalin Sort, in which every element that is out of line is simply eliminated from the list. You **must** start from the *right* for this function.    
-- **Examples**: 
-    ```ocaml 
-    stalin_sort_right [] = [] 
-    stalin_sort_right [1;0;2;1;4;4] = [0;1;4;4] 
-    stalin_sort_right [9;1;2;3;4;5] = [1; 2; 3; 4; 5]
-    stalin_sort_right ["216";"is";"terrific"; "lame"] = ["216"; "is"; "lame"]
-    ``` 
-- **Note**: 216 is not lame, it is an excellent course. It just isn't as good as 330. 
-
-# Discussion 5: Data Types and Higher Order Functions
-Due: 4 October 2020, 11:59pm EDT (No late submissions will be accepted)
-
-Points: 100 public
-
-## Introduction
-
-This exercise consists of a few short functions to help you familiarize yourself with OCaml.  You can review the content of the discussion in [notes.rb](notes.rb), which includes the topics and examples from the discussion video.
-
-### Testing & Submitting
-
-You will submit this project to [Gradescope](https://www.gradescope.com/courses/171498/assignments/718825).  You may only submit the **disc5.ml** file.  To test locally, run `dune runtest -f`.
-
-## Part 1: Currying and Partial Applications
-
-These function are best implemented using the concepts of currying and partial application. While you are not _required_ to implement them in this way, it is **_highly_** recommended.
-
-#### `mul_n n lst`
-
-- **Type**: `int -> int list -> int list`
-- **Description**: Given an int list, multiply every element in the list by `n`
-- **Examples**:
-  ```ocaml
-   mul_n 3 [1;2;3] = [3; 6; 9]
-   mul_n 5 [1;2;3] = [5;10;15]
-   mul_n 0 [1;2;3] = [0;0;0]
-   mul_n 10 [] = []
-   ```
-
-#### `join strs sep`
-
-- **Type**: `string list -> string -> string`
-- **Description**: Given a list of strings and a separator, return a new string that is each string concatenated with the separator inbetween them.
-- **Examples**:
-  ```ocaml
-  join ["a";"b";"c"] ", " = "a, b, c";
-  join ["coffee"; "pizza"; "water"] " and " = "coffee and pizza and water"
-  ```
-
-## Part 2: Option Functions
-
-#### `list_of_option o`
-
-- **Type**: `'a option -> 'a list`
-- **Description**: Take in an option and return `[]` of the option is `None` or `[a]` if the option is `Some a`.
-- **Examples**:
-  ```ocaml
-  list_of_option None = []
-  list_of_option (Some 1) = [1]
-  list_of_option (Some (Some 3)) = [Some 3]
-  ```
-
-#### `match_key k p`
-
-- **Type**: `'k -> 'k*'v -> 'v option`
-- **Description**: If the pair `p`'s key matches `k` returns the value as an option. Otherwise return `None`
-- **Examples**:
-  ```ocaml
-  match_key 1 (1, "str") = Some "str"
-  match_key 2 (1, "str") = None
-  match_key "key" ("key", "pizza") = Some "pizza"
-  match_key "not key" ("key", "pizza") = None
-  ```
-
-## Part 3: LengthLists
-
-For this part, you will be working with the `lengthlist` type. This type is meant to represent the idea of _run length encoding_ - essentially, compressing a list by grouping terms together if there are _multiple_ of the same term in a row. For example, the list `[1;1;1;1;2;2;2;3;3;4]` can be represented as, for example, using tuples of the form `(value, count)`, `[(1,4); (2, 3); (3, 2); (4, 1)]`.
-
-The `'a lengthlist` type encodes this idea, while keeping the linkedlist structure of the default OCaml list. The type is defined as in below:
+The `let` syntax is the main way to bind a name to a value. Simply: 
 
 ```ocaml
-type 'a lengthlist =
-    Cons of ('a * int * 'a lengthlist)
-  | Empty
+let name = value;; (* syntax *)
+let num1 = 5;; (* type: int *)
+let num2 = 6;; (* type: int *)
+let num3 = num1 + num2;; (* type: int *)
 ```
 
-Now, we would represent the above list as `Cons(1, 4, Cons(2, 3, Cons(3, 2, Cons(4, 1, Empty))))`.  We ask you to implement the following functions for length lists.
+We use `let` to create expressions as well. Remember that expressions evaluate to some values. So, the variables initialized in the let expressions are limited to the expression in terms of scope.
 
-#### `length_to_list llst`
+Examples:
 
-- **Type**: `'a lengthlist -> 'a list`
-- **Description**: Converts a lengthlist into its equivalent Ocaml list.
-- **Examples**:
-  ```ocaml
-  lengthlist (Cons(1, 4, Cons(2, 3, Cons(3, 2, Cons(4, 1, Empty))))) = [1;1;1;1;2;2;2;3;3;4]
-  lengthlist Empty = []
-  lengthlist (Cons("hi", 2, Cons("hello", 3, Empty))) = ["hi"; "hi"; "hello"; "hello"; "hello"]
-  ```
+```ocaml
+let x = 8 in x;;  (* will evaluate to 8 *)
+let x = 10 in let y = 15 in x + y;; (* nested let expressions *)
+let x = 5 in let y = 7 in if x > y then "bigger" else "smaller";; (* expression can be another expression *)
+```
 
-#### `map fn llst`
+## Part 3: Functions and the `rec` keyword
 
-- **Type**: `('a->'b) -> 'a lengthlist -> 'b lengthlist`
-- **Description**: Recreate the map function, but for lengthlists. Note that we only operate on the elements, and not the number of each element.
-- **Examples**:
-  ```ocaml
-  map (+ 3) (Cons(1, 4, Cons(2, 3, Cons(3, 2, Cons(4, 1, Empty))))) = Cons(4, 4, Cons(5, 3, Cons(6, 2, Cons(7, 1, Empty))))
-  map string_of_int (Cons(1, 4, Cons(2, 3, Cons(3, 2, Cons(4, 1, Empty))))) = Cons("1:, 4, Cons("2", 3, Cons("3", 2, Cons("4", 1, Empty))))
-  ```
+Functions, conventionally, are multiline reusable code that might or might not depend on other variables (arguments). To denote the notion of functions in Ocaml, we can treat the functions as expressions i.e. something that can evaluate to a value. Technically, a function processes the input and generates an output. Putting multiple expressions together can work the same magic. So, we use `let` bindings to bind expression(s) and parameters to some name to make functions.
 
-#### `decrement_count llst`
+Example:
 
-- **Type**: `'a lengthlist -> 'a lengthlist`
-- **Description**: Remove one of each element in the lengthlist. If the number of an element decreases to 0, remove it from the list entirely
-- **Examples**:
-  ```ocaml
-  decrement_count (Cons(1, 4, Cons(2, 3, Cons(3, 2, Cons(4, 1, Empty))))) = Cons(1, 3, Cons(2, 2, Cons(3, 1, Empty)))
-  decrement_count (Cons(1, 4, Cons(2, 3, Empty))) = Cons(1, 3, Cons(2, 2, Empty))
-  decrement_count (Cons("str", 1, Empty)) = Empty
-  decrement_count Empty = Empty
-  ```
+```ocaml
+let my_function a = a;; (* type 'a -> 'a *)
+```
+analogous to (java)
+```java
+<T> T my_function(T a) {
+    return a;
+}
+```
+
+Raising the complexity of the functions:
+```ocaml
+let my_func param1 param2 = param1 + param2;; (* type: int -> int -> int *)
+let to_arr a b = [a; b];;                     (* type: 'a -> 'a -> 'a list *)  
+```
+analogous to (java)
+```java
+int my_func(int param1, int param2) {
+    return param1 + param2;
+}
+
+<T> T[] to_arr(T a, T b) {
+    return {a, b};
+}
+```
+
+```ocaml
+let check_empty_string str_param = 
+    if str_param = "" then true else false;; (* type: string -> boolean *)
+
+let check_a_string str_param = 
+    if str_param = "a" then true else "invalid string";; (* will fail to compile *)
+```
+
+Notice how each branch in a function (maybe if-else or pattern matching) should return the same data type.
+
+The general pattern for determining the type of any function is:
+
+`first_param_type -> second_param_type -> ... -> last_param_type -> return_type`.
+
+### Recursive functions
+
+The use of `rec` keyword makes a function recursive. You do not need to make recursive calls, but if you want to, you need the `rec` keyword.
+
+```ocaml
+let rec factorial num = 
+    if num = 1 then 1 else num * (factorial (num - 1)) (* int -> int *)
+```
+
+## Part 4: Lists, Tuples, Variants
+
+Lists are analogous to arrays to other languages with a difference that the Ocaml lists cannot be indexed. So, recursion is the prime way of iterating over a list and pattern-matching to access an element. The lists are homogenous in nature and the elements are separated by `;`. 
+
+Examples: 
+```ocaml
+let my_list = [1;2;3];;
+let my_second_list param_a param_b = [param_a; param_b] in my_second_list 1 2;;
+let my_third_list = "first" :: ["second"; "third"];;
+```
+
+You preppend to a list using a cons `::` operator.
+
+Tuples are fixed sized, heterogenous, ordered set of values. You cannot index tuples as well but can use pattern matching to access the desired element.
+
+Examples:
+```ocaml
+let my_tuple = (1,"string",true);;
+let my_second_tuple = [1, 2, "yes, this syntax is also valid"];; (* notice the brackets *)
+let my_tuple_func a b c = (a, b, c);; 
+```
+
+Variants are beautifications of a certain type of existing data type. It is used to create customs types. Think of it like renaming a particular representation of values.
+
+Examples:
+```ocaml
+type color = Red | Green | Blue;;
+let colors = [Red; Green; Red; Red];;
+type linked_list_node = TerminalNode of int | IntermediateNode of int * linked_list_node;;
+let d = IntermediateNode(8, IntermediateNode(9, TerminalNode(10)));;
+```
+
+## Part 5: Pattern matching
+
+Pattern matching is like regular expressions for values. You match the values against a desired pattern to validate that value, extract subvalues out of it, or even manipulate the subvalues.
+
+Syntax:
+```ocaml
+match value with
+pattern1 -> code if it match pattern1
+| pattern2 -> code if it match pattern2
+.
+.
+| _ -> default code;;
+```
+
+- List pattern matching
+
+```ocaml
+let my_list [ 1; 2; 3; 4; 5];;
+
+let rec add_one lst = match lst with
+[] -> []
+| h :: t -> (h + 1) :: (add_one t)
+in add_one my_list;;
+```
+
+You can even have multiple levels of patterns.
+
+```ocaml
+let check_min_len lst = match lst with
+[] -> "zero"
+| a :: t -> "at least one"
+| a :: b :: t -> "at least two"
+| a :: b :: c :: t -> "at least three"
+| _ -> "at least four";;
+```
+
+In the same manner, you can pattern-match a tuple.
+
+```ocaml
+let get_nth_element tup index = match tup with
+(a, b, c, d) when index = 0 -> a 
+| (a, b, c, d) when index = 1 -> b 
+| (a, b, c, d) when index = 2 -> c 
+| (a, b, c, d) when index = 3 -> d;;
+
+get_nth_element (2, 4, 6, 8) 3;; (* will return 8 *)
+```
+# Map, Fold, Tree-Type
+
+## Introduction
+
+Today, we'll be covering `map` and `fold`, as well as an example of a custom data type. 
+
+## Part 1: Map
+
+Suppose you have a list in which you want to add one to each element. You could easily write a function to do this:
+
+```ocaml
+let rec add1 xs =
+  match xs with
+      [] -> []
+    | h::t -> (h+1)::(add1 t)
+;;
+```
+
+Now, let's consider a function that squares each element in a list:
+
+```ocaml
+let rec square xs =
+  match xs with
+      [] -> []
+    | h::t -> (h*h)::(square t)
+;;
+```
+
+Notice that both of these functions are *essentially* doing the same thing; they are performing the same task to each element of a list. We can generalize for any function `f` by using `map`.
+
+```ocaml
+let rec map f xs = 
+  match xs with
+      [] -> []
+    | h::t -> (f h)::(map f t)
+;;
+```
+
+## Part 2: Fold
+
+Suppose you want to compute the sum of each element in a list. We can write a function that does this:
+
+```ocaml
+let rec sum xs =
+  match xs with
+      [] -> 0
+    | h::t -> h+(sum t)
+;;
+```
+
+What if you want to compute the size of a list?
+
+```ocaml
+let rec size xs =
+  match xs with
+      [] -> 0
+    | h::t -> 1+(size t)
+;;
+```
+
+In each case, we are keeping track of an *accumulator* and adding onto it based on some property of the current element. We can generalize this to any function `f` using `fold` (also known as `fold_left`) and `fold_right`:
+
+```ocaml
+let rec fold f a lst =
+    match lst with
+    []->a
+    |h::t->fold f (f a h) t
+;;
+
+let rec fold_right f lst a =
+    match lst with
+    []->a
+    |h::t-> f h (fold_right f t a)
+;;
+```
+
+A key difference between these two is the order of association. Consider the example of adding all elements of the list `[1;2;3;4]`.  `fold_left` will associate from the left as follows:
+
+`(((0 + 1) + 2) + 3) + 4`
+
+On the other hand, `fold_right` will associate from the right as follows:
+
+`1 + (2 + (3 + (4 + 0)))`
+
+Notice how we assume that our accumulator starts with 0.
+
+## Part 3: Tree Type
+
+To get more practice with pattern matching, custom data types and map/fold, let's build a `tree` data type!
+
+First, we will define the `tree` type:
+
+```ocaml
+type 'a tree = 
+  | Leaf 
+  | Node of 'a tree * 'a * 'a tree
+```
+
+This recursively defines a `tree` to either be a
+- `Leaf` 
+- `Node` with a left sub-`tree`, a value, and a right sub-`tree`
+
+Let's generalize `map` and `fold` to work on this `tree`. Try to implement it on your own! Can you describe the what the type of these functions should be?
+
+To practice with this, let's write a few functions using map and fold define on trees:
+
+
+- Write a function to return a `tree` with each value incremented by one:
+
+- Write a function to return the sum of all the elements of a `tree`:
+
+# Tail Recursion
+
+## Tail Recursion
+
+To recap, OCaml uses a **lot** of recursion. Recursive functions are just functions that call themselves; recall that recursive functions will accumulate recursive calls on a callstack. 
+
+
+We can use **tail recursion** to optimize recursive functions. A tail recursive function is defined as a recursive function in which the recursive call is the last statement that is executed by the function. Tail recursive functions are more efficient than non-tail recursive functions.
+
+In non-tail recursive functions, calculation will happen ***after*** the recursion call. In tail recursive functions, the calculation will occur ***before*** the recursive call, so it is more efficient. This is because we don't need to evaluate a bunch of recursive calls before we get the answer; the answer has already been computed by the time we want it!
+
+We will go through some examples of recursive functions as well as tail-recursive implementations of those functions.
+
+### Fold:
+
+Non-tail recursive (`fold_right`)
+```ocaml
+let rec fold_right f xs a = match xs with
+| [] -> a
+| x :: xt -> f x (fold_right f xt a) ;;
+```
+
+Tail-recursive (`fold_left`)
+```ocaml
+let rec fold_left f a xs = match xs with
+| [] -> a
+| x :: xt -> fold f (f a x) xt ;;
+```
+
+### Factorial:
+
+Non-tail recursive
+
+```ocaml
+let rec factorial num =
+	if num > 1 then num * factorial (num - 1)
+	else 1 ;;
+```
+
+Tail-recursive
+```ocaml
+let factorial num =
+  if num = 0 then 1
+  else if num = 0 then 1
+  else
+	let rec helper n acc =
+	  if n > 0 then helper (n-1) (acc * n)
+	  else acc
+	in helper num 1 ;;
+```
+
+### Fibonacci:
+
+Non-tail recursive
+```ocaml
+let rec fibonacci n = 
+	if n = 1 then 1
+	else if n = 2 then 1
+	else fib (n-1) + fib (n-2) ;;
+```
+
+Tail-recursive
+```ocaml
+let fibonacci n = 
+  if n = 1 then 1 
+  else if n = 2 then 1 
+  else 
+	let rec helper n first second = 
+	  if n > 2 then helper (n-1) second (first + second)
+	  else second
+	in helper n 1 1 ;;
+```
+
+Observe that when writing tail-recursive versions of `factorial` and `fibonacci`, that we define a helper function which stores the result of the calculation at each given step (similar to the accumulator in fold). More precisely, the helper function stores the **current result** and the number of the **current step**. Generally, this is the easiest way to convert a non-tail recursive function into a tail recursive function.
+
+## Property Based Testing
+
+Testing on particular examples is call __unit testing__ while testing on arbitrary inputs to validate the properties of output is called **property-based testing**.
+
+Set up to write PBTs.
+
+```
+opam install qcheck 	# terminal
+open QCheck				# in your .ml file
+#require "qcheck"		# in utop before running open QCheck
+(libraries qcheck)		# in dune file
+```
+
+### Anatomy of a test
+
+```ocaml
+let test_name =
+  QCheck.Test.make 		# call the function to make the test
+	~count:1000			# number of inputs to test the function on
+    ~name:"reverse"			# name of the test in verbose
+    QCheck.(list int)					# type of input
+    (fun lst -> prop_reverse_reverses_the_list lst);;	# anonymous function that asserts the prop
+```
+
+### Example 1: Reversing a list
+
+Given a function:
+
+```ocaml
+let reverse lst = List.fold_left (fun a x -> x :: a) [] lst;;
+```
+
+We want to test it using property based testing.
+
+What are some properties of the function `reverse` and its output?
+
+### Example 2: Deleting an element from the list
+
+Given the delete function:
+
+```ocaml
+let delete lst elem = List.fold_right (fun x a -> if x = elem then a else x :: a) lst [];;
+```
