@@ -91,7 +91,7 @@ let rec factorial num =
     if num = 1 then 1 else num * (factorial (num - 1)) (* int -> int *)
 ```
 
-## Part 4: Lists, Tuples, Variants
+## Part 4: Lists, Tuples, Variants, and Records
 
 Lists are analogous to arrays to other languages with a difference that the Ocaml lists cannot be indexed. So, recursion is the prime way of iterating over a list and pattern-matching to access an element. The lists are homogenous in nature and the elements are separated by `;`. 
 
@@ -122,6 +122,39 @@ let colors = [Red; Green; Red; Red];;
 type linked_list_node = TerminalNode of int | IntermediateNode of int * linked_list_node;;
 let d = IntermediateNode(8, IntermediateNode(9, TerminalNode(10)));;
 ```
+
+In OCaml, records are composite data types that allow you to group several values of different types together under a single name. They are similar to structs in C or classes in object-oriented programming languages.
+
+A record is defined using the `type` keyword, followed by the name of the record and a set of named fields, each with its own type. Here's an example:
+
+Examples:
+```ocaml
+type person = {
+  name : string;
+  age : int;
+  email : string option;
+}
+```
+In this example, we define a new record type called person that has three named fields: 
+`name` of type `string`, `age` of type `int`, and `email` of type `string option`. The `string option` type indicates that `email` may or may not be present, as it is wrapped in an optional type.
+
+Once a record type is defined, you can create instances of it by specifying values for each of its fields:
+
+```ocaml
+let alice = { name = "Alice"; age = 25; email = Some "alice@example.com" }
+```
+
+Here, we create a new `person` record called `alice` with the values "Alice" for `name`, 25 for `age`, and `Some "alice@example.com"` for `email`.
+
+To access the values of a record, you can use dot notation:
+
+```ocaml
+let alice_name = alice.name
+```
+
+This assigns the value "Alice" to the variable `alice_name`.
+
+Records are commonly used in OCaml to represent structured data, such as database records or configuration settings. They can be passed as arguments to functions, returned from functions, and even nested inside other records or data structures.
 
 ## Part 5: Pattern matching
 
