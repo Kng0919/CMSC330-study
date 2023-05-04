@@ -19,7 +19,8 @@ fn main() {
 }
 ```
 
-	Q1.1: Which variable owns the data originally assigned to 's' at HERE?
+### Q1.1: Which variable owns the data originally assigned to 's' at HERE?
+
 	Circle the answer:	s	b	a	Data is out of scope
 	
 ### Q1.2 Lifetimes
@@ -91,7 +92,7 @@ fn main () {
 }
 ```
 
-## Q2.1
+### Q2.1
 
 What would go in place for BLANK 1 so that the project name is "Stark Suit Repair":
 	
@@ -103,7 +104,7 @@ What would go in place for BLANK 1 so that the project name is "Stark Suit Repai
 	
 	D: &"Stark Suit Repair"
 	
-## Q2.2
+### Q2.2
 
 Which of the following code options would print Rust at BLANK 2 ? Select all that apply:
 
@@ -118,7 +119,7 @@ Which of the following code options would print Rust at BLANK 2 ? Select all tha
 	D: println!("{:?}", language);
 
 	
-##Q2.3 Traits
+## Q2.3 Traits
 
 Let's say we wanted to implement the Assignment trait to the struct Project . It is defined as the following:
 
